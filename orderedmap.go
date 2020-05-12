@@ -29,6 +29,21 @@ func (m *OrderedMap) Get(key interface{}) (interface{}, bool) {
 	return nil, false
 }
 
+// GetIndex returns the key and value at a specific index. If the index is invalid, (nil, nil, false) will be returned.
+func (m *OrderedMap) GetIndex(index int) (interface{}, interface{}, bool) {
+	if index >= m.ll.Len() {
+		return nil, nil, false
+	}
+
+	front := m.ll.Front()
+	for i := 0; i < index; i++ {
+		front = front.Next()
+	}
+
+	elem := front.Value.(*orderedMapElement)
+	return elem.key, elem.value, true
+}
+
 // Set will set (or replace) a value for a key. If the key was new, then true
 // will be returned. The returned value will be false if the value was replaced
 // (even if the value was the same).
